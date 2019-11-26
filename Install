@@ -1,0 +1,19 @@
+## Colors
+C='\033[1;36m'
+G='\033[1;32m'
+R='\033[1;31m'
+Y='\033[1;33m'
+B='\033[1;34m'
+P='\033[1;35m'
+RE='\033[0m'
+clear
+echo $Y"[*] Setting up downloader.."
+cd $HOME/downloader
+chmod +x downloader
+cp downloader $PREFIX/bin/
+sleep 10
+echo $B"[*] Installing requirements.."
+pkg install python && pip install youtube-dl
+echo $Y"[+] Now you can start downloader by typing 'downloader'"
+echo $RE"."
+
