@@ -1,8 +1,10 @@
-How to use :-
+Requirements :
 
-1. Type "cd downloader"
-2. Run the Installer using "sh Install"
-3. Run downloader using "downloader"
-4. Choose if you want to enter the name or URL of the video
-5. Download or Read description of it.
+1. Python
+2. Youtube_dl ( pip install youtube_dl )
+
+Usage : ( python download query )
+
+query can either be a direct video link or a search
+
 
