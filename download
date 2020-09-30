@@ -1,0 +1,77 @@
+import sys
+import time
+import humanize
+
+try:
+ import youtube_dl
+except ImportError:
+ print('\nyoutube_dl not found, install using : pip install youtube_dl')
+ exit()
+
+search = ''
+
+for args in sys.argv[1:]:
+ search += f"{args} "
+
+if search == 'help ':
+ print('Help'.center(40, '-'))
+ print('Supply your query after the command :\nExample - python download NCS Jarico Island')
+ exit()
+
+try:
+ sys.argv[1]
+except IndexError:
+ print('\nNothing supplied, try : python download help')
+ exit()
+
+print(f"\nSearch : {search}")
+
+def bar(n):
+ bar = '[                    ]'
+ num = n // 5
+ for x in range(1, num + 1):
+  new = list(bar)
+  new[x] = '#'
+  bar = ''.join(new)
+ return bar
+
+def hook(x):
+ if x['status'] == 'finished':
+  print(f"\nDownloaded to {x['filename']}")
+ elif x['status'] == 'downloading':
+  n = float(x['_percent_str'].replace('%', ''))
+  n = int(n // 1)
+  sys.stdout.write('\r')
+  sys.stdout.write(f"{n} % {bar(n)} Downloaded {humanize.naturalsize(int(x['downloaded_bytes']))}")
+  sys.stdout.flush()
+ elif x['status'] == 'error':
+  print('\nAn error occured while downloading')
+
+opts = {
+    'outtmpl': '%(id)s',
+    'restrictfilenames': True,
+    'noplaylist': True,
+    'nocheckcertificate': True,
+    'ignoreerrors': False,
+    'logtostderr': False,
+    'no_warnings': True,
+    'quiet': True,
+    'default_search': 'auto',
+    'source_address': '0.0.0.0',
+    'progress_hooks': [hook]
+}
+
+ydl = youtube_dl.YoutubeDL(opts)
+info = ydl.extract_info(search, download=False)
+
+if 'entries' in info:
+ info = info['entries'][0]
+
+id = info.get('id')
+title = info.get('title')
+view = info.get('view_count')
+
+print(f"\nObtained video title : {title}\nViews : {view}\n")
+
+ydl.download([f"https://m.youtube.com/watch?v={id}"])
+
